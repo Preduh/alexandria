@@ -90,6 +90,9 @@ pnpm test
 
 # 3. Build — confirma que o TypeScript compila sem erros para produção
 pnpm build
+
+# 4. Segurança — auditoria de dependências e análise estática (vulnerabilidades)
+pnpm test:security
 ```
 
-> **Regra de ouro**: Se `pnpm lint && pnpm test && pnpm build` não passar com zero erros, o código não está pronto.
+> **Regra de ouro**: Se `pnpm lint && pnpm test && pnpm build && pnpm test:security` não passar com zero erros, o código não está pronto.
