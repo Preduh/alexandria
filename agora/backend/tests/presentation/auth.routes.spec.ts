@@ -8,6 +8,7 @@ testApp.use(express.json());
 testApp.use('/api/auth', authRoutes); // Injeção de Rota Limpa pra TDD real
 
 describe('Auth API (E2E Integration)', () => {
+  let accessToken: string;
   let createdUserId: string;
 
   it('should register a new user via POST /api/auth/register', async () => {
@@ -39,6 +40,8 @@ describe('Auth API (E2E Integration)', () => {
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('accessToken');
     expect(res.body.user.email).toBe('e2e@agora-test.com');
+
+    accessToken = res.body.accessToken;
   });
 
   it('should return 401 Unauthorized for invalid passwords on POST /api/auth/login', async () => {
@@ -53,10 +56,42 @@ describe('Auth API (E2E Integration)', () => {
     expect(res.body).toHaveProperty('message', 'Invalid credentials');
   });
 
-  it('should delete the account via DELETE /api/auth/account/:id', async () => {
-    // End-to-End full flow completion (garante testes idempotentes no PGDB real)
+  it('should return 401 Unauthorized when deleting account without token', async () => {
     const res = await request(testApp)
       .delete(`/api/auth/account/${createdUserId}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty('message', 'Unauthorized');
+  });
+
+  it('should return 403 Forbidden when trying to delete another user account', async () => {
+    // 1. Register and Login another user
+    await request(testApp).post('/api/auth/register').send({
+      email: 'intruder@test.com',
+      password: 'password123',
+      name: 'Intruder'
+    });
+
+    const loginRes = await request(testApp).post('/api/auth/login').send({
+      email: 'intruder@test.com',
+      password: 'password123'
+    });
+
+    const intruderToken = loginRes.body.accessToken;
+
+    // 2. Try to delete the first user with the intruder's token
+    const res = await request(testApp)
+      .delete(`/api/auth/account/${createdUserId}`)
+      .set('Authorization', `Bearer ${intruderToken}`);
+
+    expect(res.status).toBe(403);
+    expect(res.body).toHaveProperty('message', 'Forbidden');
+  });
+
+  it('should delete the account via DELETE /api/auth/account/:id with valid token', async () => {
+    const res = await request(testApp)
+      .delete(`/api/auth/account/${createdUserId}`)
+      .set('Authorization', `Bearer ${accessToken}`);
 
     expect(res.status).toBe(204); // No Content
   });

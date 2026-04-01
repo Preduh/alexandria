@@ -7,6 +7,8 @@ import { PrismaUserRepository } from '../../infrastructure/database/prismaUserRe
 import { BcryptHashProvider } from '../../infrastructure/providers/bcryptHashProvider';
 import { JwtTokenProvider } from '../../infrastructure/providers/jwtTokenProvider';
 
+import { authMiddleware } from '../middlewares/authMiddleware';
+
 const authRoutes = Router();
 
 // Fábrica de Injeção de Dependência (Dependency Injection container root block)
@@ -20,8 +22,10 @@ const deleteAccountUseCase = new DeleteAccountUseCase(userRepository);
 
 const authController = new AuthController(registerUseCase, loginUseCase, deleteAccountUseCase);
 
+const authenticated = authMiddleware(jwtProvider);
+
 authRoutes.post('/register', (req, res) => authController.register(req, res));
 authRoutes.post('/login', (req, res) => authController.login(req, res));
-authRoutes.delete('/account/:id', (req, res) => authController.deleteAccount(req, res));
+authRoutes.delete('/account/:id', authenticated, (req, res) => authController.deleteAccount(req, res));
 
 export default authRoutes;

@@ -8,4 +8,12 @@ export class JwtTokenProvider implements ITokenProvider {
   generate(payload: Record<string, any>): string {
     return jwt.sign(payload, SECRET, { expiresIn: '7d' }); // validade ideal pra uso de App local (7 dias de cache)
   }
+
+  verify(token: string): Record<string, any> | null {
+    try {
+      return jwt.verify(token, SECRET) as Record<string, any>;
+    } catch {
+      return null;
+    }
+  }
 }

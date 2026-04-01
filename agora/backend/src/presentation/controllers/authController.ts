@@ -67,6 +67,12 @@ export class AuthController {
   async deleteAccount(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const authenticatedUserId = (req as any).user.userId;
+
+      if (authenticatedUserId !== id) {
+        return sendError(res, 403, 'Forbidden');
+      }
+
       await this.deleteAccountUseCase.execute({ userId: id });
       res.status(204).send();
     } catch (e: any) {
