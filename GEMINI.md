@@ -48,7 +48,7 @@ Aplicação monólito de uso pessoal com objetivo de gerenciar conhecimento, tar
 - **pnpm**: Gerenciador de pacotes rápido e eficiente.
 - **ESLint**: Garantia de qualidade e padronização do código.
 - **Zod**: Validação de schemas e formulários no lado do cliente.
-- **CSS Modules (Vanilla CSS)**: Estilização modular e flexível sem dependência de frameworks utilitários, garantindo estética premium e controle total sobre o design (rich design).
+- **TailwindCSS (v3 LTS)**: Estilização utilitária para desenvolvimento rápido, consistência de design e suporte nativo a Dark Mode.
 - **Vitest + React Testing Library**: Setup para TDD rigoroso no frontend.
 
 ### Estrutura de Diretórios (`agora/backend/src/`)

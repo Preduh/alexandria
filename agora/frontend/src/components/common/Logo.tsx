@@ -1,5 +1,4 @@
 import { Library } from 'lucide-react';
-import styles from './Logo.module.css';
 
 interface LogoProps {
   size?: number;
@@ -8,9 +7,16 @@ interface LogoProps {
 
 export function Logo({ size = 32, showText = true }: LogoProps) {
   return (
-    <div className={styles.logoContainer}>
-      <Library size={size} className={styles.icon} />
-      {showText && <h1 className={styles.text}>Ágora</h1>}
+    <div className="flex items-center gap-3 justify-center select-none">
+      <Library 
+        size={size} 
+        className="text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.3)] transition-all" 
+      />
+      {showText && (
+        <h1 className="text-2xl font-bold text-foreground m-0 tracking-tight">
+          Ágora
+        </h1>
+      )}
     </div>
   );
 }
