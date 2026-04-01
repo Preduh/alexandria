@@ -47,7 +47,11 @@ export const LoginResponseSchema = authRegistry.register(
 export const ErrorResponseSchema = authRegistry.register(
   'ErrorResponse',
   z.object({
-    error: z.string().openapi({ example: 'Invalid credentials' }),
+    message: z.string().openapi({ description: 'Human readable error summary' }),
+    errors: z.array(z.object({
+      field: z.string(),
+      message: z.string()
+    })).optional().openapi({ example: [{ field: 'email', message: 'Invalid format' }] }),
   })
 );
 
@@ -100,7 +104,7 @@ authRegistry.registerPath({
     },
     401: {
       description: 'Invalid credentials',
-      content: { 'application/json': { schema: ErrorResponseSchema } },
+      content: { 'application/json': { schema: ErrorResponseSchema, example: { message: 'Invalid email or password' } } },
     },
   },
 });
@@ -120,9 +124,18 @@ authRegistry.registerPath({
     204: {
       description: 'Account deleted successfully',
     },
+    401: {
+      description: 'Access token is required',
+      content: { 'application/json': { schema: ErrorResponseSchema, example: { message: 'Access token is required' } } },
+    },
+    403: {
+      description: 'You are not authorized to delete this account',
+      content: { 'application/json': { schema: ErrorResponseSchema, example: { message: 'You are not authorized to delete this account' } } },
+    },
     404: {
-      description: 'User not found',
-      content: { 'application/json': { schema: ErrorResponseSchema } },
+      description: 'The requested account does not exist',
+      content: { 'application/json': { schema: ErrorResponseSchema, example: { message: 'The requested account does not exist' } } },
     },
   },
+  security: [{ BearerAuth: [] }],
 });

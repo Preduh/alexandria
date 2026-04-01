@@ -26,6 +26,7 @@ Aplicação monólito de uso pessoal com objetivo de gerenciar conhecimento, tar
 4. **Manutenção obrigatória deste arquivo (`GEMINI.md`)**:
    - **Qualquer alteração na estrutura de pastas** do projeto deve ser imediatamente refletida na seção `Estrutura de Diretórios` deste arquivo. Nunca deixe a documentação estrutural defasada.
    - **Qualquer nova feature ou endpoint HTTP** adicionado ao sistema deve ser acompanhado de documentação Swagger correspondente no arquivo `src/docs/<dominio>.docs.ts` do respectivo módulo, seguindo o padrão já estabelecido em `auth.docs.ts`.
+   - **A documentação deve ser obrigatoriamente atualizada** sempre que ocorrerem mudanças no código que impactem o seu conteúdo (ex: novos campos, mudanças em mensagens de erro ou códigos de status HTTP).
 
 ### Identidade e Autenticação
 - A barreira de proteção do sistema usará por padrão credenciais baseadas em **Email e Senha**.

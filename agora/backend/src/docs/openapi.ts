@@ -4,6 +4,14 @@ import { authRegistry } from './auth.docs';
 // Instância global do Registry OpenAPI
 export const registry = new OpenAPIRegistry([authRegistry]);
 
+// Security Schemes
+registry.registerComponent('securitySchemes', 'BearerAuth', {
+  type: 'http',
+  scheme: 'bearer',
+  bearerFormat: 'JWT',
+  description: 'Insira o token JWT retornado pelo login para acessar as rotas protegidas.',
+});
+
 export function generateOpenApiDocument() {
   const generator = new OpenApiGeneratorV3(registry.definitions);
 
