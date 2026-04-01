@@ -7,7 +7,7 @@ on:
     branches: [ master, develop ]
 
 jobs:
-  build-and-test:
+  backend-quality:
     name: Backend Quality Pipeline
     runs-on: ubuntu-latest
 
@@ -37,7 +37,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9 # Versão estável do pnpm
+          version: 9
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -68,6 +68,42 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgrespassword@localhost:5432/agora_test?schema=public
           JWT_SECRET: agora_ci_secret_test
+
+      - name: Build Application
+        run: pnpm build
+
+  frontend-quality:
+    name: Frontend Quality Pipeline
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./agora/frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: './pnpm-lock.yaml'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --dir ../../
+
+      - name: Lint check
+        run: pnpm lint
+
+      - name: Run Unit/Component Tests
+        run: pnpm test
 
       - name: Build Application
         run: pnpm build

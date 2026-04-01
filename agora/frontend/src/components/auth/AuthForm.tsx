@@ -38,7 +38,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode, onSubmit }) => {
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)}>
+      <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)} aria-label="auth-form">
         <h2 className={styles.title}>
           {mode === 'login' ? 'Bem-vindo de volta' : 'Crie sua conta'}
         </h2>
