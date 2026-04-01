@@ -12,7 +12,9 @@
     "build": "tsc",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
-    "test:coverage": "vitest run --coverage"
+    "lint:security": "eslint \"src/**/*.ts\" --config eslint.config.mjs",
+    "test:coverage": "vitest run --coverage",
+    "test:security": "pnpm audit && pnpm lint:security"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.5.0",
@@ -38,6 +40,7 @@
     "@vitest/coverage-v8": "^4.1.2",
     "dotenv": "^17.3.1",
     "eslint": "^10.1.0",
+    "eslint-plugin-security": "^4.0.0",
     "globals": "^17.4.0",
     "prisma": "^7.6.0",
     "supertest": "^7.2.2",
