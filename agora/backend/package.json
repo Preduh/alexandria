@@ -10,6 +10,7 @@
     "test:watch": "vitest",
     "studio": "BROWSER=none prisma studio",
     "build": "tsc",
+    "prisma": "prisma",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "lint:security": "eslint \"src/**/*.ts\" --config eslint.config.mjs",

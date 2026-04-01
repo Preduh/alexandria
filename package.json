@@ -1,0 +1,14 @@
+{
+  "name": "alexandria-monorepo",
+  "private": true,
+  "description": "Monorepo para o ecossistema Alexandria",
+  "scripts": {
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "build": "pnpm -r run build",
+    "test:security": "pnpm -r run test:security"
+  },
+  "devDependencies": {
+    "pnpm": "^10.28.2"
+  }
+}

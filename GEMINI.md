@@ -16,8 +16,8 @@ Aplicação monólito de uso pessoal com objetivo de gerenciar conhecimento, tar
    - Toda *feature* ou alteração de código só será implementada após existir um teste para ela (que inicialmenter deve falhar). A ordem de execução na prática é rigorosamente: **Criar o Teste da Feature > Implementar a Feature**.
 
 2. **Clean Architecture (Arquitetura Limpa)**:
-   - Todo o sistema da Ágora é embasado integralmente no modelo de Clean Architecture, focando no isolamento das Regras de Negócio (Domínio e Casos de Uso) do Framework e Banco de Dados.
-   - O desenvolvimento deve sempre respeitar a Inversão de Dependência, mantendo o Core (`domain` e `application/usecases`) alienado das camadas de `infrastructure` e `presentation`.
+   - Todo o sistema do **backend** da Ágora é embasado integralmente no modelo de Clean Architecture, focando no isolamento das Regras de Negócio (Domínio e Casos de Uso) do Framework e Banco de Dados.
+   - O desenvolvimento do backend deve sempre respeitar a Inversão de Dependência, mantendo o Core (`domain` e `application/usecases`) alienado das camadas de `infrastructure` e `presentation`.
 
 3. **Idioma e Nomenclatura**:
    - O código-fonte estrutural (variáveis, arquivos, classes, métodos e endpoints) deve ser **escrito exclusivamente em Inglês**.
@@ -42,6 +42,15 @@ Aplicação monólito de uso pessoal com objetivo de gerenciar conhecimento, tar
 - **Zod**: Biblioteca de validação de schema TypeScript-first. Todo input HTTP (`req.body`) deve ser validado por um Zod schema antes de chegar ao UseCase.
 - **Swagger (OpenAPI 3.0)**: Documentação interativa das rotas HTTP, gerada automaticamente a partir dos Zod schemas via `@asteasolutions/zod-to-openapi`. Acessível em `/api/docs` em modo de desenvolvimento.
 
+### Stack do frontend:
+- **Next.js (App Router)**: Framework React para produção, utilizando SSR e RSC.
+- **TypeScript**: Tipagem estática para segurança no desenvolvimento das interfaces.
+- **pnpm**: Gerenciador de pacotes rápido e eficiente.
+- **ESLint**: Garantia de qualidade e padronização do código.
+- **Zod**: Validação de schemas e formulários no lado do cliente.
+- **CSS Modules (Vanilla CSS)**: Estilização modular e flexível sem dependência de frameworks utilitários, garantindo estética premium e controle total sobre o design (rich design).
+- **Vitest + React Testing Library**: Setup para TDD rigoroso no frontend.
+
 ### Estrutura de Diretórios (`agora/backend/src/`)
 - `core/`: Regras de negócio, entidades e tipagens abstratas exclusivas do domínio.
   - `entities/`: Interfaces TypeScript das entidades de negócio (ex: `User.ts`).
@@ -58,6 +67,16 @@ Aplicação monólito de uso pessoal com objetivo de gerenciar conhecimento, tar
 - `docs/`: Schemas Zod e documentação OpenAPI 3.0 das rotas HTTP.
   - `openapi.ts`: Registry central e gerador do documento OpenAPI.
   - `<dominio>.docs.ts`: Schemas e rotas documentadas por domínio (ex: `auth.docs.ts`).
+
+### Estrutura de Diretórios (`agora/frontend/src/`)
+- `app/`: Estrutura de roteamento (Pages, Layouts e Server Components).
+- `components/`: Componentes React reutilizáveis e atômicos.
+- `hooks/`: Custom hooks para gerenciamento de estado e efeitos.
+- `services/`: Implementação de chamadas de API e integração com o backend.
+- `styles/`: Arquivos CSS globais e bibliotecas de estilo (CSS Modules).
+- `types/`: Definições globais de tipos TypeScript.
+- `utils/`: Funções utilitárias e helpers.
+- `schemas/`: Schemas de validação de dados via Zod.
 
 ### Response Standards
 
@@ -82,16 +101,16 @@ Para manter a consistência e facilitar o consumo pelo frontend, todas as respos
 Toda alteração no código **deve obrigatoriamente passar pelas três etapas abaixo**, nesta ordem. Nenhuma entrega é válida se alguma das etapas falhar.
 
 ```bash
-# 1. Lint — garante padrão de código, camelCase e ausência de erros estáticos
+# 1. Lint — garante padrão de código e ausência de erros estáticos
 pnpm lint
 
-# 2. Testes — valida todas as regras de negócio e contratos HTTP (TDD)
+# 2. Testes — valida todas as regras de negócio (TDD)
 pnpm test
 
-# 3. Build — confirma que o TypeScript compila sem erros para produção
+# 3. Build — confirma que a aplicação compila sem erros para produção
 pnpm build
 
-# 4. Segurança — auditoria de dependências e análise estática (vulnerabilidades)
+# 4. Segurança — auditoria de dependências (vulnerabilidades)
 pnpm test:security
 ```
 
