@@ -2,6 +2,11 @@ import { IUserRepository } from '../../core/repositories/userRepository.interfac
 import { IHashProvider } from '../../core/providers/hashProvider.interface';
 import { ITokenProvider } from '../../core/providers/tokenProvider.interface';
 
+interface LoginInput {
+  email: string;
+  password: string;
+}
+
 export class LoginUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
@@ -9,7 +14,7 @@ export class LoginUseCase {
     private readonly tokenProvider: ITokenProvider
   ) {}
 
-  async execute(input: any) {
+  async execute(input: LoginInput) {
     const { email, password } = input;
 
     const user = await this.userRepository.findByEmail(email);
@@ -22,7 +27,10 @@ export class LoginUseCase {
       throw new Error('Invalid credentials');
     }
 
-    const accessToken = this.tokenProvider.generate({ userId: user.id });
+    const accessToken = this.tokenProvider.generate({
+      userId: user.id,
+      email: user.email,
+    });
 
     // Segurança: eliminamos a hash da memória do objeto exposto
     const userWithoutPassword = { ...user };

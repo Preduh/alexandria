@@ -29,11 +29,12 @@ export class AuthController {
 
       const user = await this.registerUseCase.execute(req.body);
       res.status(201).json(user);
-    } catch (e: any) {
-      if (e.message === 'Email already in use') {
-        sendError(res, 409, e.message);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Registration failed';
+      if (message === 'Email already in use') {
+        sendError(res, 409, message);
       } else {
-        sendError(res, 400, e.message || 'Registration failed');
+        sendError(res, 400, message);
       }
     }
   }
@@ -55,28 +56,34 @@ export class AuthController {
 
       const result = await this.loginUseCase.execute(req.body);
       res.status(200).json(result);
-    } catch (e: any) {
-      if (e.message === 'Invalid credentials') {
-        sendError(res, 401, e.message);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Login failed';
+      if (message === 'Invalid credentials') {
+        sendError(res, 401, 'Invalid email or password');
       } else {
-        sendError(res, 400, e.message || 'Login failed');
+        sendError(res, 400, 'An error occurred during login');
       }
     }
   }
 
   async deleteAccount(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const authenticatedUserId = (req as any).user.userId;
+      const id = req.params.id as string;
+      const authenticatedUserId = req.user?.userId;
 
       if (authenticatedUserId !== id) {
-        return sendError(res, 403, 'Forbidden');
+        return sendError(res, 403, 'You are not authorized to delete this account');
       }
 
       await this.deleteAccountUseCase.execute({ userId: id });
       res.status(204).send();
-    } catch (e: any) {
-      sendError(res, 404, e.message);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : '';
+      if (message === 'User not found') {
+        sendError(res, 404, 'The requested account does not exist');
+      } else {
+        sendError(res, 400, 'An error occurred while deleting the account');
+      }
     }
   }
 }

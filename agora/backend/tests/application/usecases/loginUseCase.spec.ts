@@ -57,8 +57,11 @@ describe('LoginUseCase', () => {
     expect(mockUserRepository.findByEmail).toHaveBeenCalledWith('john@doe.com');
     expect(mockHashProvider.compare).toHaveBeenCalledWith('valid_password', 'hashed_password_from_db');
     // Payload do JWT no padrão
-    expect(mockTokenProvider.generate).toHaveBeenCalledWith({ userId: 'any_uuid' });
-    
+    expect(mockTokenProvider.generate).toHaveBeenCalledWith({
+      userId: 'any_uuid',
+      email: 'john@doe.com'
+    });
+
     // Assert a resposta do UseCase
     expect(result).toHaveProperty('accessToken', 'valid_jwt_token');
     expect(result).toHaveProperty('user');
@@ -77,7 +80,7 @@ describe('LoginUseCase', () => {
       email: 'invalid@doe.com',
       password: 'any_password',
     })).rejects.toThrow('Invalid credentials');
-    
+
     // Garantir que não tentou gerar token
     expect(mockTokenProvider.generate).not.toHaveBeenCalled();
   });
@@ -100,7 +103,7 @@ describe('LoginUseCase', () => {
       email: 'john@doe.com',
       password: 'wrong_password',
     })).rejects.toThrow('Invalid credentials');
-    
+
     // Garantir rigorosamente que a geração de token (login) nunca foi engatilhada
     expect(mockTokenProvider.generate).not.toHaveBeenCalled();
   });

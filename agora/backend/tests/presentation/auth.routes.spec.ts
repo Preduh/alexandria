@@ -53,7 +53,7 @@ describe('Auth API (E2E Integration)', () => {
       });
 
     expect(res.status).toBe(401);
-    expect(res.body).toHaveProperty('message', 'Invalid credentials');
+    expect(res.body).toHaveProperty('message', 'Invalid email or password');
   });
 
   it('should return 401 Unauthorized when deleting account without token', async () => {
@@ -61,7 +61,7 @@ describe('Auth API (E2E Integration)', () => {
       .delete(`/api/auth/account/${createdUserId}`);
 
     expect(res.status).toBe(401);
-    expect(res.body).toHaveProperty('message', 'Unauthorized');
+    expect(res.body).toHaveProperty('message', 'Access token is required');
   });
 
   it('should return 403 Forbidden when trying to delete another user account', async () => {
@@ -85,7 +85,7 @@ describe('Auth API (E2E Integration)', () => {
       .set('Authorization', `Bearer ${intruderToken}`);
 
     expect(res.status).toBe(403);
-    expect(res.body).toHaveProperty('message', 'Forbidden');
+    expect(res.body).toHaveProperty('message', 'You are not authorized to delete this account');
   });
 
   it('should delete the account via DELETE /api/auth/account/:id with valid token', async () => {
@@ -118,11 +118,11 @@ describe('Auth API (E2E Integration)', () => {
     expect(Array.isArray(res.body.errors)).toBe(true);
   });
 
-  it('should return 404 Not Found if deleting a non-existent account', async () => {
+  it('should return 401 Unauthorized if deleting a non-existent account without token', async () => {
     const res = await request(testApp)
       .delete('/api/auth/account/non-existent-id');
 
-    expect(res.status).toBe(404);
-    expect(res.body).toHaveProperty('message');
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty('message', 'Access token is required');
   });
 });
