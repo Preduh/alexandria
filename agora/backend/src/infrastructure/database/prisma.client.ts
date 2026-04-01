@@ -1,8 +1,9 @@
+import 'dotenv/config';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgrespassword@localhost:5432/agora?schema=public';
+const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:password_here@localhost:5432/agora?schema=public';
 
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
