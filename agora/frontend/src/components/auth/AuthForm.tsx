@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, registerSchema, LoginInput, RegisterInput } from '../../schemas/auth';
+import { Logo } from '../common/Logo';
 import styles from '../../styles/components/AuthForm.module.css';
 
 interface AuthFormProps {
@@ -39,6 +40,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ mode, onSubmit }) => {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)} aria-label="auth-form">
+        <Logo size={48} />
         <h2 className={styles.title}>
           {mode === 'login' ? 'Bem-vindo de volta' : 'Crie sua conta'}
         </h2>

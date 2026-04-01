@@ -6,6 +6,7 @@ describe('AuthForm Component', () => {
   it('should render the login form correctly', () => {
     render(<AuthForm mode="login" onSubmit={vi.fn()} />);
 
+    expect(screen.getByText('Ágora')).toBeInTheDocument();
     expect(screen.getByText('Bem-vindo de volta')).toBeInTheDocument();
     expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();

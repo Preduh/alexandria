@@ -1,0 +1,21 @@
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+  user-select: none;
+}
+
+.icon {
+  color: #3b82f6; /* Azul acadêmico / produtivo */
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+}
+
+.text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  letter-spacing: -0.025em;
+  font-family: inherit;
+}
